@@ -7,7 +7,7 @@ module Rack
     class RequestExpiryError  < Error; end
     class RequestTimeoutError < Error; end
 
-    RequestDetails  = Struct.new(:id, :age, :timeout, :duration, :state)
+    RequestDetails  = Struct.new(:id, :age, :timeout, :duration, :state, :path)
     ENV_INFO_KEY    = 'rack-timeout.info'
     VALID_STATES    = [:ready, :active, :expired, :timed_out, :completed]
     MAX_REQUEST_AGE = 30 # seconds
@@ -30,6 +30,7 @@ module Rack
       time_left     = MAX_REQUEST_AGE - info.age         if info.age
       time_left    += self.class.overtime                if time_left && self.class._request_has_body?(env)
       info.timeout  = [self.class.timeout, time_left].compact.select { |n| n >= 0 }.min
+      info.path     = env['REQUEST_PATH']
 
       if time_left && time_left <= 0
         Rack::Timeout._set_state! env, :expired
