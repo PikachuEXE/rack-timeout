@@ -55,21 +55,15 @@ module Rack
         '%.fms' % (s * 1000)
       end
 
-      def normalize_path(path)
-         path.gsub("/","-").                 #remove slash from path
-              gsub(/[^A-Za-z0-9.:\-_]/, ''). #only keep subset of chars
-              gsub(/^-/,'')
-      end
-
       # generates the actual log string
       def log_state_change(info)
         add(STATE_LOG_LEVEL[info.state]) do
-          s  = "source=#{normalize_path(info.path)}"
-          s << ' id='                       << info.id           if info.id
-          s << ' measure#request.age='      << ms(info.age)      if info.age
-          s << ' timeout='                  << ms(info.timeout)  if info.timeout
-          s << ' measure#request.duration=' << ms(info.duration) if info.duration
-          s << ' state='                    << info.state.to_s   if info.state
+          s  = 'source=rack-timeout'
+          s << ' id='       << info.id           if info.id
+          s << ' age='      << ms(info.age)      if info.age
+          s << ' timeout='  << ms(info.timeout)  if info.timeout
+          s << ' duration=' << ms(info.duration) if info.duration
+          s << ' state='    << info.state.to_s   if info.state
           s
         end
       end
