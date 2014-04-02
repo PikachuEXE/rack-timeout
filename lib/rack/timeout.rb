@@ -29,12 +29,9 @@ module Rack
       info.age      = Time.now - request_start           if request_start
       time_left     = self.class.timeout - info.age      if info.age
       time_left    += self.class.overtime                if time_left && self.class._request_has_body?(env)
-<<<<<<< HEAD
       info.timeout  = [self.class.timeout, time_left].compact.select { |n| n >= 0 }.min
       info.path     = env['REQUEST_PATH']
-=======
       info.timeout  = time_left || self.class.timeout
->>>>>>> pr/2
 
       if time_left && time_left <= 0
         Rack::Timeout._set_state! env, :expired
