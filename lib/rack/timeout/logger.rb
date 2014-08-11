@@ -29,7 +29,7 @@ module Rack
         target.register_state_change_observer(:logger, self)
       end
 
-      def initialize(device = $stderr, *a)
+      def initialize(device = $stdout, *a)
         super(device, *a)
         self.formatter = SIMPLE_FORMATTER
         self.level     = self.class.determine_level
