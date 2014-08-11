@@ -165,6 +165,16 @@ kick in for functional tests as they bypass the rack middleware stack.
 
 [pablobm]: http://stackoverflow.com/a/8681208/13989
 
+You can also set a custom handler on request timeout (not expiry):
+```ruby
+# This is the default handler
+# `info` is a `Rack::Timeout::RequestDetails`
+# `app_thread` is a `Thread`
+Rack::Timeout.timeout_handler = proc do |info, app_thread|
+  app_thread.raise(Rack::Timeout::RequestTimeoutError, "Request ran for longer than #{info.timeout} seconds.")
+end
+```
+
 
 Observers
 ---------
