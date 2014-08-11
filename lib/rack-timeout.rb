@@ -13,5 +13,3 @@ if defined?(Rails) && [3, 4].include?(Rails::VERSION::MAJOR)
     end
   end
 end
-
-Rack::Timeout::StateChangeLogger.register! unless defined?(Rails) && Rails.env.test?
